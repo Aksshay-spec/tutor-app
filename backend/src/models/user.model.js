@@ -37,11 +37,11 @@ const userSchema = new Schema(
 
     status: {
       type: String,
-      enum: ["active", "blocked"],
-      default: "active",
+      enum: ["active", "inactive", "blocked"],
+      default: "inactive",
     },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 export const User = model("User", userSchema);

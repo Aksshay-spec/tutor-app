@@ -1,4 +1,4 @@
-// src/middlewares/role.middleware.js
+//backend/src/middlewares/role.middleware.js
 
 export const allowRoles = (...allowedRoles) => {
   return (req, res, next) => {

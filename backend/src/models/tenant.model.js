@@ -19,8 +19,8 @@ const tenantSchema = new Schema(
 
     status: {
       type: String,
-      enum: ["active", "blocked"],
-      default: "active",
+      enum: ["active", "inactive", "blocked"],
+      default: "inactive",
     },
 
     plan: {

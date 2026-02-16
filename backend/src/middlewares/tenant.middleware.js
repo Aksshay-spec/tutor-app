@@ -1,4 +1,4 @@
-// src/middlewares/tenant.middleware.js
+//backend/src/middlewares/tenant.middleware.js
 
 export const tenantIsolation = (req, res, next) => {
   const { role, tenantId } = req.user;

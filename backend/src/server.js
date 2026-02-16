@@ -1,9 +1,10 @@
-//src/server.js
-const dotenv = require("dotenv");
-dotenv.config();
+// src/server.js
 
-const app = require("./app");
-const connectDB = require("./config/db");
+import dotenv from "dotenv";
+dotenv.config(); // MUST be first
+
+import app from "./app.js";
+import connectDB from "./config/connectDB.js";
 
 connectDB();
 
