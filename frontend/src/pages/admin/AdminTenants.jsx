@@ -1,5 +1,4 @@
 // src/pages/admin/AdminTenants.jsx
-
 import AdminLayout from "@/components/admin/AdminLayout";
 import api from "@/services/api";
 import { Card, CardContent } from "@/components/ui/card";
@@ -12,6 +11,7 @@ import {
 } from "@/components/ui/select";
 
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
 
 const fetchTenants = async () => {
   const res = await api.get("/superadmin/tenants");
@@ -21,13 +21,11 @@ const fetchTenants = async () => {
 const AdminTenants = () => {
   const queryClient = useQueryClient();
 
-  // 🔥 Fetch tenants
   const { data: tenants = [], isLoading } = useQuery({
     queryKey: ["tenants"],
     queryFn: fetchTenants,
   });
 
-  // 🔥 Mutation for status change
   const statusMutation = useMutation({
     mutationFn: async ({ id, status }) => {
       if (status === "active") {
@@ -36,8 +34,13 @@ const AdminTenants = () => {
         return api.patch(`/superadmin/block/${id}`);
       }
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries(["tenants"]);
+    onSuccess: (_, variables) => {
+      queryClient.invalidateQueries({ queryKey: ["tenants"] });
+
+      toast.success(`Tenant is now ${variables.status}`);
+    },
+    onError: () => {
+      toast.error("Failed to update tenant status");
     },
   });
 
@@ -79,7 +82,6 @@ const AdminTenants = () => {
                         {tenant.ownerUserId?.email}
                       </td>
 
-                      {/* Status Badge */}
                       <td className="p-3">
                         <span
                           className={`px-2 py-1 rounded text-white text-sm ${
@@ -94,9 +96,9 @@ const AdminTenants = () => {
                         </span>
                       </td>
 
-                      {/* 🔥 Select Dropdown */}
                       <td className="p-3 w-[180px]">
                         <Select
+                          disabled={statusMutation.isPending}
                           defaultValue={tenant.status}
                           onValueChange={(value) =>
                             handleStatusChange(tenant._id, value)

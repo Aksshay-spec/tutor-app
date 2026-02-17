@@ -22,3 +22,5 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+frontend/src/pages/admin/AdminTenants-v1.jsx
+frontend/src/components/admin/AdminHeader-v1.jsx
