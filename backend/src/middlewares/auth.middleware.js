@@ -2,16 +2,15 @@
 
 import jwt from "jsonwebtoken";
 
-const JWT_SECRET = process.env.JWT_SECRET;
-
-if (!JWT_SECRET) {
-  throw new Error("JWT_SECRET is not defined");
-}
-
 export const authMiddleware = (req, res, next) => {
+  const JWT_SECRET = process.env.JWT_SECRET;
+
+  if (!JWT_SECRET) {
+    return res.status(500).json({ message: "Server configuration error" });
+  }
+
   const authHeader = req.headers.authorization;
 
-  // Expected format: Bearer <token>
   if (!authHeader || !authHeader.startsWith("Bearer ")) {
     return res.status(401).json({ message: "Unauthorized" });
   }
@@ -20,15 +19,6 @@ export const authMiddleware = (req, res, next) => {
 
   try {
     const decoded = jwt.verify(token, JWT_SECRET);
-
-    /*
-      decoded contains:
-      {
-        userId,
-        role,
-        tenantId
-      }
-    */
 
     req.user = decoded;
     next();
